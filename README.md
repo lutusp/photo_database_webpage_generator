@@ -2,7 +2,7 @@
 
 This Python project does several things:
 
-\* It scans user-provided graphic image directories and collects the names of image files.
+\* It recursively scans user-provided graphic image directories and collects the names of image files.
 
 \* It creates a Sqlite3 database consisting of image filenames, sizes, creation dates, plus GPS coordinates and altitudes if that information is available in the image files.
 

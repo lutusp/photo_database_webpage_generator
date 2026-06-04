@@ -1,18 +1,20 @@
 \# photo\_database\_webpage\_generator
 
-This Python project does several things:
+A Quick Summary: This project creates a convenient, searchable web page of a user’s image collection.
 
-\* It recursively scans user-provided graphic image directories and collects the names of image files.
+Here’s how it works:
 
-\* It creates a Sqlite3 database consisting of image filenames, sizes, creation dates, plus GPS coordinates and altitudes if that information is available in the image files.
+\* The program recursively scans user-provided graphic image directories and collects paths to image files.
 
-\* It uses a local AI engine to create a plain-text description of each image file (details below) and saves the generated descriptions in the database.
+\* Then it creates a Sqlite3 database consisting of image filenames, sizes, creation dates, plus GPS coordinates and altitudes if that information is available in the image files.
 
-\* It creates a Web page consisting of links to all scanned images, plus the AI-generated text descriptions added as titles to each image HTML tag – this causes the descriptions to appear when the user hovers a pointing device over an image.
+\* Then it uses a small, local AI engine to create a plain-text description of each image file (details below) and saves the text descriptions in the database.
 
-The Web page includes a text entry that allows the user to enter a search string. As the user enters a search, the displayed images change to those whose descriptions match the search entry. This search feature allows the user to find specific images in large image archives.
+\* Then it creates a Web page consisting of links to all scanned images, plus the AI-generated text descriptions added as titles to each image HTML tag. The descriptions appear when the user hovers a pointing device over an image.
 
-The user may choose to create two Web pages. The first Web page, always created, works correctly while located anywhere on the host system because it uses absolute image file addressing. The second Web page, created if the user sets “relative = True”, uses relative addressing and is saved in the graphic image directory.
+\* The user searches the Web page by way of a text entry. As the user enters a search expression, the displayed images change to match the search entry, character by character. This search feature allows the user to very quickly find specific images in large image archives.
+
+And the user has the option create a second Web page. The first Web page, always created, works correctly while located anywhere on the host system because it uses absolute image file addressing. The second Web page, created if the user sets “relative = True”, uses relative addressing and is saved in the graphic image directory.
 
 This second Web page has what may be a non-obvious advantage – if the user creates a USB stick for portable presentations, the relative-address Web page will work from any system the USB stick is plugged into.
 
@@ -22,15 +24,18 @@ Here are the project’s requirements, some of which may be changed by editing t
 
 \* Ollama installed locally
 
-\* A specific, small (1.3 GB) LLM : “gemma4:e2b”, may be installed using this ollama command:
+\* A specific, small (1.3 GB) LLM : “gemma4:e2b”, may be installed using this Ollama command:
 
 $ ollama pull  gemma4:e2b
 
-The user may substitute another LLM of similar ability, but the LLM must be able to read and describe graphic images.
+The user may substitute another LLM of similar ability, but the LLM must be able to read and describe graphic images. Many small LLMs can provide the desired text descriptions and will run correctly on small systems.
 
-To prepare the program for scanning and use, create a data record in the main() function using the instructions found there:
+To prepare the program for scanning and use, create a data record in the Python main() function using the instructions found there:
 
-\# layout: variable name = (task name,basepath,subdirectory, relative (True/False))
+variable name = (task name,basepath,subdirectory, relative (True/False))
+
+
+The task name can be anything the user wants -- it’s used to name the database and Web pages. This serves to distinguish tasks that span multiple image directories.
 
 Four example data records are included to familiarize users with the data layout. Be sure to remove these examples, or simply avoid using them in the main program loop.
 
@@ -40,15 +45,15 @@ It’s a good idea to start with a small set of graphic images. This program can
 
 \* Only certain browsers will tolerate such large image sets, in fact, in my experience the only browser that tolerates such large image sets is Firefox. In any case it’s best to avoid huge image sets within a single Web page.
 
-In practice, when presented with a large image collection, the program does the following:
+When executed, the program does the following:
 
-\* It creates two subdirectories -- databases and html\_pages – to receive the results.
+\* It creates two subdirectories -- “databases” and “html\_pages” – to receive the results.
 
-\* It scans the provided image source directories, accumulating image data in a Sqlite3 database and calling on the local LLM to provide text descriptions of each image. The AI text description step takes the most time, typically two seconds per image on a properly equipped laptop.
+\* It scans the provided image source directories, accumulating image data in a Sqlite3 database saved in the “databases” subdirectory, and calling on the local LLM to provide text descriptions of each image. The AI text description step takes the most time, typically two seconds per image on a properly equipped laptop.
 
-\* After the scan and database creation is complete, the program creates an absolute-address Web page in the “html\_pages” subdirectory. If the user sets the relative flag in the task description, a second Web page is created and saved in the image directory, which allows relative addressing to work as intended.
+\* After the scan and database creation is complete, the program creates an absolute-address Web page in the “html\_pages” subdirectory. If the user sets the relative flag in the task description, a second Web page is also created and saved in the image directory, which allows relative addressing to work as intended.
 
-Another feature of this program deserves mention. After the initial database and Web page creation, if the user changes the contents of the image directories, adds or removes images, or renames them, on subsequent runs this program will automatically recreate the databases and Web pages to take these changes into account, without creating new text descriptions or performing any unnecessary tasks.
+Another feature of this program deserves mention. After the initial database and Web page creation, if the user changes the contents of the image directories, adds or removes images, or renames them, on subsequent runs this program will automatically recreate the databases and Web pages to take these changes into account, without recreating existing text descriptions or performing any unnecessary tasks.
 
-I have only run this program on Linux, but it should function the same on Windows, and if not, please tell me – I’ll see about making it more cross-platform.
+I run this program on Linux, but it should function the same on Windows, and if not, please tell me – I’ll see about making it more cross-platform.
 

@@ -1,4 +1,5 @@
-\# Photo Database Searchable Webpage Generator
+\<h1\>Photo Database Searchable Webpage Generator\</h1\>
+
 
 A Quick Summary: This project creates a convenient, searchable web page of a user’s image collection.
 

@@ -1,4 +1,4 @@
-\# photo\_database\_webpage\_generator
+\# Photo Database Searchable Webpage Generator
 
 A Quick Summary: This project creates a convenient, searchable web page of a user’s image collection.
 
@@ -33,7 +33,6 @@ The user may substitute another LLM of similar ability, but the LLM must be able
 To prepare the program for scanning and use, create a data record in the Python main() function using the instructions found there:
 
 variable name = (task name,basepath,subdirectory, relative (True/False))
-
 
 The task name can be anything the user wants -- it’s used to name the database and Web pages. This serves to distinguish tasks that span multiple image directories.
 

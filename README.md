@@ -14,19 +14,19 @@ Here’s how it works:
 
 * The user searches the Web page by way of a text entry. As the user enters a search expression, the displayed images change to match the search entry, character by character. This search feature allows the user to very quickly find specific images in large image archives.
 
-And the user has the option create a second Web page. The first Web page, always created, works correctly while located anywhere on the host system because it uses absolute image file addressing. The second Web page, created if the user sets “relative = True”, uses relative addressing and is saved in the graphic image directory.
+* The user has the option create a second Web page. The first Web page, always created, works correctly while located anywhere on the host system because it uses absolute image file addressing. The second Web page, created if the user sets “relative = True”, uses relative addressing and is saved in the graphic image directory.
 
 This second Web page has what may be a non-obvious advantage – if the user creates a USB stick for portable presentations, the relative-address Web page will work from any system the USB stick is plugged into.
 
 Here are the project’s requirements, some of which may be changed by editing the Python source:
 
-* The Python sqlite3, gpsphoto and ollama libraries
+* The Python sqlite3, gpsphoto and ollama libraries, and a few others listed in requirements.txt
 
 * Ollama installed locally
 
 * A specific, small (1.3 GB) LLM : “gemma4:e2b”, may be installed using this Ollama command:
 
-$ ollama pull  gemma4:e2b
+    $ ollama pull  gemma4:e2b
 
 The user may substitute another LLM of similar ability, but the LLM must be able to read and describe graphic images. Many small LLMs can provide the desired text descriptions and will run correctly on small systems.
 
@@ -54,5 +54,9 @@ When executed, the program does the following:
 
 Another feature of this program deserves mention. After the initial database and Web page creation, if the user changes the contents of the image directories, adds or removes images, or renames them, on subsequent runs this program will automatically recreate the databases and Web pages to take these changes into account, without recreating existing text descriptions or performing any unnecessary tasks.
 
-I run this program on Linux, but it should function the same on Windows, and if not, please tell me – I’ll see about making it more cross-platform.
+This program has been tested on Linux and Windows 11. Obviously it works much better on Linux. One drawback to Windows (among many) is that the absolute-addressed webpage won't work on all browsers, for excruciatingly stupid reasons. This is solved by only using the relative-addressed webpage.
+
+To be sure your system is ready to run this application, perform this step before the first run:
+
+    $ python -m pip install -c requirements.txt
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import ollama
@@ -9,11 +9,8 @@ import re
 import sys
 import os
 from datetime import datetime
-from dataclasses import dataclass
-
-
-# pip install GPSPhoto exifread piexif
 from GPSPhoto import gpsphoto
+from dataclasses import dataclass
 
 
 def get_photo_description(model, photopath):
@@ -30,26 +27,31 @@ def get_photo_description(model, photopath):
                     "role": "user",
                     "content": "briefly describe this picture",
                     "images": [
-                        f"{photopath}",
+                        photopath,
                     ],
                 },
             ],
         )
         reply = response["message"]["content"]
-    except:
-        reply = f"get_photo_description: Error reading file: {photopath}"
+    except Exception as e:
+        reply = f"get_photo_description(): error while processing {photopath} : {e}"
     return reply
 
 
+# base: Path object
+# subdir: Path object
 def query_os_file_list(base, subdir):
     files = []
-    spec = base + subdir
-    result = Path(base).rglob("*", case_sensitive=False)
+    spec = str(base / subdir)
+    result = base.rglob("*", case_sensitive=False)
     for posixpath in result:
         path = str(posixpath)
+        # print(f'SPEC: {spec}, PATH: {path}')
         if spec in path:
             files += [path]
+    # content to exclude, example thumbnails
     files = [f for f in files if not re.search("(?i)MagicLantern", f)]
+    # content to include
     files = [f for f in files if re.search(r"(?i)\.(jpg|jpeg|png)$", f)]
     files.sort()
     return files
@@ -81,17 +83,19 @@ class Photorec:
 # ... except firefox
 
 
-def create_webpage(dir_html, task_name, base, valid_records, relative):
+def create_webpage(dir_html, task_name, obase, valid_records, relative):
     pic_data = []
     rel_pic_data = []
     tab = ""
-    for path in sorted(valid_records):
-        rec: Photorec = valid_records[path]
+    base = re.sub(r"\\", "/", str(obase))
+    for opath in sorted(valid_records):
+        rec: Photorec = valid_records[opath]
+        # convert possible Windows path delimiters
+        path = re.sub(r"\\", "/", opath)
         # create relative path
-        relpath = re.sub(base, "./", path)
+        relpath = re.sub(base, ".", path)
         # process description string
         desc = re.sub(r'"', r"&quot;", rec.desc)
-
         # absolute address
         pic_data += [html_line(path, desc, tab)]
         # relative address
@@ -148,7 +152,7 @@ def process(task_name, base, db_name, subdir, model):
         # avoid fractional seconds
         mi_time = int(m_time)
         # make sure this creates a string
-        date_time = f"{datetime.fromtimestamp(mi_time)}"
+        date_time = str(datetime.fromtimestamp(mi_time))
         size = os.path.getsize(path)
         # acquire latitude, longitude, altitude if they exist
         gpslat = "N/A"
@@ -201,11 +205,13 @@ def main():
     alaska = ("alaska", "/netbackup/GRFIX/", "alaska_", False)
     travels = ("travels", "/netbackup/GRFIX/", "all_travels_", False)
     winter = ("winter", "/netbackup/GRFIX/", "Winter_travel_pics", False)
-    worldsail = ("worldsail", "/netbackup/GRFIX/", "WorldSail", False)
+    worldsail = ("worldsail", "/netbackup/GRFIX/", "WorldSail", True)
 
     global_start = time.time()
-    for task in (worldsail, travels, winter, alaska):
-        task_name, base, subdir, relative = task
+    for task in (worldsail,):  # travels, winter, alaska):
+        task_name, obase, osubdir, relative = task
+        base = Path(obase)
+        subdir = Path(osubdir)
         db_name = f"{dir_db}/photo_database_{task_name}.db"
         print(f"* Begin task: {task_name} ...")
         sys.stdout.flush()

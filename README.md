@@ -14,7 +14,7 @@ Here’s how it works:
 
 * The user searches the Web page by way of a text entry. As the user enters a search expression, the displayed images change to match the search entry, character by character. This search feature allows the user to very quickly find specific images in large image archives.
 
-* The user has the option create a second Web page. The first Web page, always created, works correctly while located anywhere on the host system because it uses absolute image file addressing. The second Web page, created if the user sets “relative = True”, uses relative addressing and is saved in the graphic image directory.
+* The user has the option to create a second Web page. The first Web page, always created, works correctly while located anywhere on the host system because it uses absolute image file addressing. The second Web page, created if the user sets “relative = True”, uses relative addressing and is saved in the graphic image directory.
 
 This second Web page has what may be a non-obvious advantage – if the user creates a USB stick for portable presentations, the relative-address Web page will work from any system the USB stick is plugged into.
 

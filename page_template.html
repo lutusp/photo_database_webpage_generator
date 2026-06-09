@@ -40,23 +40,29 @@
         var total = 0;
         const searchItems = [];
         items.forEach(item => {
-            const key = item.getAttribute('title').toLowerCase();
+            const key = item.getAttribute('title');
             searchItems.push({ key: key, value: item });
             total += 1;
         });
         showtotal.innerHTML = "Images: " + total;
         searchInput.addEventListener('input', (e) => {
             var total = 0;
-            const query = e.target.value.toLowerCase();
-            searchItems.forEach(item => {
-                if (item.key.includes(query)) {
-                    item.value.style.display = 'inline';
-                    total += 1;
+            try {
+                // regex syntax errors are possible here
+                const regex = new RegExp(e.target.value, "i");
+                searchItems.forEach(item => {
+                    if (regex.test(item.key)) {
+                        item.value.style.display = 'inline';
+                        total += 1;
 
-                } else {
-                    item.value.style.display = 'none';
-                }
-            });
+                    } else {
+                        item.value.style.display = 'none';
+                    }
+                });
+            }
+            catch (error) {
+                // disregard user regex input errors
+            }
             showtotal.innerHTML = "Found " + total;
         });
 

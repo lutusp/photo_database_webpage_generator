@@ -24,7 +24,7 @@ Here are the project’s requirements, some of which may be changed by editing t
 
 * Ollama installed locally
 
-* A specific, small (1.3 GB) LLM : “gemma4:e2b”, may be installed using this Ollama command:
+* A specific LLM : “gemma4:e2b”, may be installed using this Ollama command:
 
     $ ollama pull  gemma4:e2b
 

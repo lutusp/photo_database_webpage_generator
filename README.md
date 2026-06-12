@@ -14,6 +14,8 @@ Here’s how it works:
 
 * The user searches the Web page by way of a text entry. As the user enters a search expression, the displayed images change to match the search entry, character by character. This search feature allows the user to very quickly find specific images in large image archives.
 
+* The Web page supports regular expression searches. For example, if an image has a description of “A boat with several fish on its deck”, a Web page search of “boat.+fish” will select images with both words present, using common regular expression syntax.
+
 * The user has the option to create a second Web page. The first Web page, always created, works correctly while located anywhere on the host system because it uses absolute image file addressing. The second Web page, created if the user sets “relative = True”, uses relative addressing and is saved in the graphic image directory.
 
 This second Web page has what may be a non-obvious advantage – if the user creates a USB stick for portable presentations, the relative-address Web page will work from any system the USB stick is plugged into.
@@ -50,7 +52,7 @@ When executed, the program does the following:
 
 * It scans the provided image source directories, accumulating image data in a Sqlite3 database saved in the “databases” subdirectory, and calling on the local LLM to provide text descriptions of each image. The AI text description step takes the most time, typically two seconds per image on a properly equipped laptop.
 
-* After the scan and database creation is complete, the program creates an absolute-address Web page in the “html\_pages” subdirectory. If the user sets the relative flag in the task description, a second Web page is also created and saved in the image directory, which allows relative addressing to work as intended.
+* After the scan and database creation is complete, the program creates an absolute-address Web page in the “html_pages” subdirectory. If the user sets the relative flag in the task description, a second Web page is also created and saved in the image directory, which allows relative addressing to work as intended.
 
 Another feature of this program deserves mention. After the initial database and Web page creation, if the user changes the contents of the image directories, adds or removes images, or renames them, on subsequent runs this program will automatically recreate the databases and Web pages to take these changes into account, without recreating existing text descriptions or performing any unnecessary tasks.
 
